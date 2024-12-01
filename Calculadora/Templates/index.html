@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="display">
+            <div class="theme">
+                <svg style="cursor: pointer;" id="lightTheme" class="claro" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M12 2a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0V3a1 1 0 0 1 1-1m7.071 2.929a1 1 0 0 1 0 1.414l-.707.707a1 1 0 1 1-1.414-1.414l.707-.707a1 1 0 0 1 1.414 0m-14.142 0a1 1 0 0 1 1.414 0l.707.707A1 1 0 0 1 5.636 7.05l-.707-.707a1 1 0 0 1 0-1.414M12 8a4 4 0 1 0 0 8a4 4 0 0 0 0-8m-6 4a6 6 0 1 1 12 0a6 6 0 0 1-12 0m-4 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2H3a1 1 0 0 1-1-1m17 0a1 1 0 0 1 1-1h1a1 1 0 1 1 0 2h-1a1 1 0 0 1-1-1M5.636 16.95a1 1 0 0 1 1.414 1.414l-.707.707a1 1 0 0 1-1.414-1.414zm11.314 1.414a1 1 0 0 1 1.414-1.414l.707.707a1 1 0 0 1-1.414 1.414zM12 19a1 1 0 0 1 1 1v1a1 1 0 1 1-2 0v-1a1 1 0 0 1 1-1" />
+                </svg>
+                <svg style="cursor: pointer;" id="darkTheme" class="oscuro" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 256 256">
+                    <path fill="currentColor"
+                        d="M233.54 142.23a8 8 0 0 0-8-2a88.08 88.08 0 0 1-109.8-109.8a8 8 0 0 0-10-10a104.84 104.84 0 0 0-52.91 37A104 104 0 0 0 136 224a103.1 103.1 0 0 0 62.52-20.88a104.84 104.84 0 0 0 37-52.91a8 8 0 0 0-1.98-7.98m-44.64 48.11A88 88 0 0 1 65.66 67.11a89 89 0 0 1 31.4-26A106 106 0 0 0 96 56a104.11 104.11 0 0 0 104 104a106 106 0 0 0 14.92-1.06a89 89 0 0 1-26.02 31.4" />
+                </svg>
+            </div>
+            <div class="numbers">
+                <span class="operation" id="operation"></span>
+                <span class="result" id="result"></span>
+            </div>
+        </div>
+        <div class="keyboard">
+            <div class="key sec" data-value="AC">AC</div>
+            <div class="key sec" data-value="√"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12h2l4 8l4-16h8"/></svg></div>
+            <div class="key sec" data-value="%">%</div>
+            <div class="key oper" data-value="/"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 256 256"><path fill="currentColor" d="M228 128a12 12 0 0 1-12 12H40a12 12 0 0 1 0-24h176a12 12 0 0 1 12 12M128 84a20 20 0 1 0-20-20a20 20 0 0 0 20 20m0 88a20 20 0 1 0 20 20a20 20 0 0 0-20-20"/></svg></div>
+            <div class="key" data-value="7">7</div>
+            <div class="key" data-value="8">8</div>
+            <div class="key" data-value="9">9</div>
+            <div class="key oper" data-value="*"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 6L6 18M6 6l12 12"/></svg></div>
+            <div class="key" data-value="4">4</div>
+            <div class="key" data-value="5">5</div>
+            <div class="key" data-value="6">6</div>
+            <div class="key oper" data-value="-">-</div>
+            <div class="key" data-value="1">1</div>
+            <div class="key" data-value="2">2</div>
+            <div class="key" data-value="3">3</div>
+            <div class="key oper" data-value="+">+</div>
+            <div class="key" data-value="0">0</div>
+            <div class="key" data-value=".">.</div>
+            <div class="key" id="equal" data-value="=">=</div>
+           
+        </div>
+    </div>
+    <script>
+        const operationElement = document.getElementById('operation');
+        const resultElement = document.getElementById('result');
+        let currentOperation = '';
+
+        // Función para manejar el clic en los botones
+        document.querySelectorAll('.key').forEach(button => {
+            button.addEventListener('click', () => {
+                const value = button.getAttribute('data-value');
+
+                if (value === 'AC') {
+                    currentOperation = '';
+                    resultElement.textContent = '';
+                    operationElement.textContent = '';
+               
+                } else if (value === '=') {
+                    // Enviar la operación al backend
+                    console.log("aqui fue")
+                    fetch("/", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'  // Importante en Django para la seguridad CSRF
+                        },
+                        body: JSON.stringify({
+                            'tipo_operacion': detectOperation(currentOperation),
+                            'valor_1': extractFirstNumber(currentOperation),
+                            'valor_2': extractSecondNumber(currentOperation)
+                        }),
+                       
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.resultado) {
+                            resultElement.textContent = data.resultado;
+                        } else {
+                            resultElement.textContent = 'Error';
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                } else {
+                    currentOperation += value;
+                    operationElement.textContent = currentOperation;
+                }
+            });
+        });
+
+        // Función para detectar el tipo de operación
+        function detectOperation(operation) {
+            if (operation.includes('+')) {
+                return 'suma';
+            } else if (operation.includes('-')) {
+                return 'resta';
+            } else if (operation.includes('*')) {
+                return 'multiplicacion';
+            } else if (operation.includes('/')) {
+                return 'division';
+            }else if (operation.includes('%')) {
+                return 'porcentaje';
+            }else if (operation.includes('√')) {
+                return 'raiz_cuadrada';
+            }
+            return null;
+        }
+
+        // Función para extraer el primer número de la operación
+        function extractFirstNumber(operation) {
+            const split = operation.split(/[+\-*%√/]/);
+            return split[0];
+        }
+
+        // Función para extraer el segundo número de la operación
+        function extractSecondNumber(operation) {
+            const split = operation.split(/[+\-*%√/]/);
+            return split[1];
+        }
+    </script>
+    <script>
+        const lightThemeButton = document.getElementById('lightTheme');
+        const darkThemeButton = document.getElementById('darkTheme');
+        const body = document.body;
+        const container = document.querySelector('.container');
+        const display = document.querySelector('.display');
+        const theme = document.querySelector('.theme');
+        const keyboard = document.querySelector('.keyboard');
+        const keys = document.querySelectorAll('.key');
+        const operations = document.querySelectorAll('.operation, .result, .sign, .oper');
+    
+        // Activar tema claro
+        lightThemeButton.addEventListener('click', () => {
+            body.classList.remove('dark');
+            container.classList.remove('dark');
+            display.classList.remove('dark');
+            theme.classList.remove('dark');
+            keyboard.classList.remove('dark');
+            keys.forEach(key => key.classList.remove('dark'));
+            operations.forEach(op => op.classList.remove('dark'));
+        });
+    
+        // Activar tema oscuro
+        darkThemeButton.addEventListener('click', () => {
+            body.classList.add('dark');
+            container.classList.add('dark');
+            display.classList.add('dark');
+            theme.classList.add('dark')
+            keyboard.classList.add('dark');
+            keys.forEach(key => key.classList.add('dark'));
+            operations.forEach(op => op.classList.add('dark'));
+        });
+    </script>
+    
+</body>
+
+</html>
