@@ -1,5 +1,5 @@
 
-# CalculadoraIbero
+# Calculadora Ibero Para Mantenimiento de Software
 
 Este es un proyecto de una calculadora desarrollado en Django.
 
