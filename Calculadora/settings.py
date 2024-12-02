@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "Usuarios",
+    "Historial",
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,10 @@ ROOT_URLCONF = 'Calculadora.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, "Calculadora/Templates")],
+        'DIRS': [
+            os.path.join(BASE_DIR, "Calculadora/Templates"),
+            os.path.join(BASE_DIR, "Usuarios/Templates"),
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
