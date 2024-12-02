@@ -68,13 +68,13 @@ class CalculadoraView(View):
             else:
                 operacion = f"{valor_1}{OPERACION_SIMBOLOS[tipo]} {valor_2}"
 
-            # # Guardar en el historial
-            # if request.user.is_authenticated:
-            #     Historial.objects.create(
-            #         usuario=request.user,
-            #         operacion=operacion,
-            #         resultado=str(resultado)
-            #     )
+            # Guardar en el historial
+            if request.user.is_authenticated:
+                Historial.objects.create(
+                    usuario=request.user,
+                    operacion=operacion,
+                    resultado=str(resultado)
+                )
         except Exception as e:
             return JsonResponse({"errores": [str(e)]}, status=400)
 
