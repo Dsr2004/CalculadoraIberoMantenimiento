@@ -16,15 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from Usuarios.views import user_login, register_user, logout_view
+# from Usuarios.views import user_login, register_user, logout_view
 from .views import CalculadoraView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", CalculadoraView.as_view(), name="home"),
-    path('login/', user_login, name='login'),
-    path('register/', register_user, name='register'),
-    path('logout/', logout_view, name='logout'),
+    # path('login/', user_login, name='login'),
+    # path('register/', register_user, name='register'),
+    # path('logout/', logout_view, name='logout'),
     
 ]
